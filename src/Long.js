@@ -14,12 +14,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+// #ifdef GOOG
+goog.provide('dcodeIO.Long');
+// #endif
+
 
 /**
  * @license Long.js (c) 2013 Daniel Wirtz <dcode@dcode.io>
  * Released under the Apache License, Version 2.0
  * see: https://github.com/dcodeIO/Long.js for details
- * 
+ *
  * Long.js is based on goog.math.Long from the Closure Library.
  * Copyright 2009 The Closure Library Authors. All Rights Reserved.
  * Released under the Apache License, Version 2.0
@@ -51,7 +55,7 @@
      * (-2^63) because -MIN_VALUE == MIN_VALUE (since 2^63 cannot be represented as
      * a positive number, it overflows back into a negative).  Not handling this
      * case would often result in infinite recursion.
-     * 
+     *
      * @exports Long
      * @class A Long class for representing a 64-bit two's-complement integer value.
      * @param {number} low The low (signed) 32 bits of the long.
@@ -60,7 +64,7 @@
      * @constructor
      */
     var Long = function(low, high, unsigned) {
-        
+
         /**
          * The low 32 bits as a signed value.
          * @type {number}
@@ -87,7 +91,7 @@
 
     // NOTE: The following cache variables are used internally only and are therefore not exposed as properties of the
     // Long class.
-    
+
     /**
      * A cache of the Long representations of small integer values.
      * @type {!Object}
@@ -242,7 +246,7 @@
 
     // NOTE: the compiler should inline these constant values below and then remove these variables, so there should be
     // no runtime penalty for these.
-    
+
     // NOTE: The following constant values are used internally only and are therefore not exposed as properties of the
     // Long class.
 
@@ -594,7 +598,7 @@
      */
     Long.prototype.add = function(other) {
         // Divide each number into 4 chunks of 16 bits, and then sum the chunks.
-        
+
         var a48 = this.high >>> 16;
         var a32 = this.high & 0xFFFF;
         var a16 = this.low >>> 16;
@@ -666,7 +670,7 @@
 
         // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
         // We can skip products that would overflow.
-        
+
         var a48 = this.high >>> 16;
         var a32 = this.high & 0xFFFF;
         var a16 = this.low >>> 16;
@@ -916,7 +920,7 @@
         l.unsigned = true;
         return l;
     };
-    
+
     /**
      * @return {Long} Cloned instance with the same low/high bits and unsigned flag.
      * @expose
@@ -925,6 +929,7 @@
         return new Long(this.low, this.high, this.unsigned);
     };
 
+    // #ifndef GOOG
     // Enable module loading if available
     if (typeof module != 'undefined' && module["exports"]) { // CommonJS
         module["exports"] = Long;
@@ -936,5 +941,11 @@
         }
         global["dcodeIO"]["Long"] = Long;
     }
+    // #else
+    if (!global["dcodeIO"]) {
+      global["dcodeIO"] = {};
+    }
+    global["dcodeIO"]["Long"] = Long;
+    // #endif
 
 })(this);

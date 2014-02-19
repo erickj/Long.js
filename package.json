@@ -13,15 +13,19 @@
     },
     "devDependencies": {
         "testjs": "latest",
-        "closurecompiler": "latest"
+        "closurecompiler": "latest",
+        "preprocessor": "latest"
     },
     "license": "Apache-2.0",
     "engines": {
         "node": ">=0.6"
     },
     "scripts": {
-        "make": "npm run-script compile && npm test && npm run-script jsdoc",
-        "compile": "ccjs Long.js --compilation_level=ADVANCED_OPTIMIZATIONS > Long.min.js",
+        "make": "npm run-script build && npm run-script compile && npm test",
+        "build": "node build.js",
+        "compile": "npm run-script compile-long && npm run-script compile-goog",
+        "compile-long": "ccjs Long.js --compilation_level=ADVANCED_OPTIMIZATIONS > Long.min.js",
+        "compile-goog": "ccjs Long.goog.js --compilation_level=ADVANCED_OPTIMIZATIONS > Long.goog.min.js",
         "test": "node node_modules/testjs/bin/testjs tests/suite.js",
         "jsdoc": "jsdoc -c jsdoc.json"
     }
