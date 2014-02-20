@@ -92,7 +92,7 @@ goog.provide('dcodeIO.Long');
         this.unsigned = !!unsigned;
     };
 // #ifdef GOOG
-(function lambda(global) {
+(function(global) {
     var Long = dcodeIO.Long;
 // #endif
 
