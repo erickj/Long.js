@@ -25,8 +25,10 @@
         "build": "node build.js",
         "compile": "npm run-script compile-long && npm run-script compile-goog",
         "compile-long": "ccjs Long.js --compilation_level=ADVANCED_OPTIMIZATIONS > Long.min.js",
-        "compile-goog": "ccjs Long.goog.js --compilation_level=ADVANCED_OPTIMIZATIONS > Long.goog.min.js",
-        "test": "node node_modules/testjs/bin/testjs tests/suite.js",
+        "compile-goog": "ccjs Long.goog.js --compilation_level=ADVANCED_OPTIMIZATIONS --flagfile=.closureflags > Long.goog.min.js",
+        "test": "npm run-script test-long && npm run-script test-goog",
+        "test-long": "node node_modules/testjs/bin/testjs tests/suite.js",
+        "test-goog": "node node_modules/testjs/bin/testjs tests/goog_suite.js",
         "jsdoc": "jsdoc -c jsdoc.json"
     }
 }

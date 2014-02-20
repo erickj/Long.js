@@ -35,7 +35,9 @@ goog.provide('dcodeIO.Long');
  * integer value, which faithfully simulates the behavior of a Java "long". This
  * implementation is derived from LongLib in GWT.
  */
+// #ifndef GOOG
 (function(global) {
+// #endif
 
     /**
      * Constructs a 64-bit two's-complement integer, given its low and high 32-bit
@@ -56,14 +58,17 @@ goog.provide('dcodeIO.Long');
      * a positive number, it overflows back into a negative).  Not handling this
      * case would often result in infinite recursion.
      *
-     * @exports Long
      * @class A Long class for representing a 64-bit two's-complement integer value.
      * @param {number} low The low (signed) 32 bits of the long.
      * @param {number} high The high (signed) 32 bits of the long.
      * @param {boolean=} unsigned Whether unsigned or not. Defaults to `false` (signed).
      * @constructor
      */
+    // #ifdef GOOG
+    dcodeIO.Long = function(low, high, unsigned) {
+    // #else
     var Long = function(low, high, unsigned) {
+    // #endif
 
         /**
          * The low 32 bits as a signed value.
@@ -86,6 +91,10 @@ goog.provide('dcodeIO.Long');
          */
         this.unsigned = !!unsigned;
     };
+// #ifdef GOOG
+(function lambda(global) {
+    var Long = dcodeIO.Long;
+// #endif
 
     // NOTE: Common constant values ZERO, ONE, NEG_ONE, etc. are defined below the from* methods on which they depend.
 
@@ -108,7 +117,7 @@ goog.provide('dcodeIO.Long');
      * Returns a Long representing the given (32-bit) integer value.
      * @param {number} value The 32-bit integer in question.
      * @param {boolean=} unsigned Whether unsigned or not. Defaults to false (signed).
-     * @return {!Long} The corresponding Long value.
+     * @return {!dcodeIO.Long} The corresponding Long value.
      * @expose
      */
     Long.fromInt = function(value, unsigned) {
@@ -143,7 +152,7 @@ goog.provide('dcodeIO.Long');
      * number.  Otherwise, zero is returned.
      * @param {number} value The number in question.
      * @param {boolean=} unsigned Whether unsigned or not. Defaults to false (signed).
-     * @return {!Long} The corresponding Long value.
+     * @return {!dcodeIO.Long} The corresponding Long value.
      * @expose
      */
     Long.fromNumber = function(value, unsigned) {
@@ -171,7 +180,7 @@ goog.provide('dcodeIO.Long');
      * @param {number} lowBits The low 32 bits.
      * @param {number} highBits The high 32 bits.
      * @param {boolean=} unsigned Whether unsigned or not. Defaults to false (signed).
-     * @return {!Long} The corresponding Long value.
+     * @return {!dcodeIO.Long} The corresponding Long value.
      * @expose
      */
     Long.fromBits = function(lowBits, highBits, unsigned) {
@@ -185,7 +194,7 @@ goog.provide('dcodeIO.Long');
      * @param {number} part1 The middle 28 bits
      * @param {number} part2 The high 28 (8) bits
      * @param {boolean=} unsigned Whether unsigned or not. Defaults to false (signed).
-     * @return {!Long}
+     * @return {!dcodeIO.Long}
      * @expose
      */
     Long.from28Bits = function(part0, part1, part2, unsigned) {
@@ -200,7 +209,7 @@ goog.provide('dcodeIO.Long');
      * @param {string} str The textual representation of the Long.
      * @param {(boolean|number)=} unsigned Whether unsigned or not. Defaults to false (signed).
      * @param {number=} radix The radix in which the text is written.
-     * @return {!Long} The corresponding Long value.
+     * @return {!dcodeIO.Long} The corresponding Long value.
      * @expose
      */
     Long.fromString = function(str, unsigned, radix) {
@@ -286,62 +295,62 @@ goog.provide('dcodeIO.Long');
     var TWO_PWR_63_DBL = TWO_PWR_64_DBL / 2;
 
     /**
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      */
     var TWO_PWR_24 = Long.fromInt(1 << 24);
 
     /**
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      * @expose
      */
     Long.ZERO = Long.fromInt(0);
 
     /**
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      * @expose
      */
     Long.ONE = Long.fromInt(1);
 
     /**
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      * @expose
      */
     Long.NEG_ONE = Long.fromInt(-1);
 
     /**
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      * @expose
      */
     Long.MAX_SIGNED_VALUE = Long.fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0, false);
 
     /**
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      * @expose
      */
     Long.MAX_UNSIGNED_VALUE = Long.fromBits(0xFFFFFFFF | 0, 0xFFFFFFFF | 0, true);
 
     /**
      * Alias of {@link Long.MAX_SIGNED_VALUE} for goog.math.Long compatibility.
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      * @expose
      */
     Long.MAX_VALUE = Long.MAX_SIGNED_VALUE;
 
     /**
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      * @expose
      */
     Long.MIN_SIGNED_VALUE = Long.fromBits(0, 0x80000000 | 0, false);
 
     /**
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      * @expose
      */
     Long.MIN_UNSIGNED_VALUE = Long.fromBits(0, 0, true);
 
     /**
      * Alias of {@link Long.MIN_SIGNED_VALUE}  for goog.math.Long compatibility.
-     * @type {!Long}
+     * @type {!dcodeIO.Long}
      * @expose
      */
     Long.MIN_VALUE = Long.MIN_SIGNED_VALUE;
@@ -501,7 +510,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @param {Long} other Long to compare against.
+     * @param {dcodeIO.Long} other Long to compare against.
      * @return {boolean} Whether this Long equals the other.
      * @expose
      */
@@ -511,7 +520,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @param {Long} other Long to compare against.
+     * @param {dcodeIO.Long} other Long to compare against.
      * @return {boolean} Whether this Long does not equal the other.
      * @expose
      */
@@ -520,7 +529,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @param {Long} other Long to compare against.
+     * @param {dcodeIO.Long} other Long to compare against.
      * @return {boolean} Whether this Long is less than the other.
      * @expose
      */
@@ -529,7 +538,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @param {Long} other Long to compare against.
+     * @param {dcodeIO.Long} other Long to compare against.
      * @return {boolean} Whether this Long is less than or equal to the other.
      * @expose
      */
@@ -538,7 +547,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @param {Long} other Long to compare against.
+     * @param {dcodeIO.Long} other Long to compare against.
      * @return {boolean} Whether this Long is greater than the other.
      * @expose
      */
@@ -547,7 +556,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @param {Long} other Long to compare against.
+     * @param {dcodeIO.Long} other Long to compare against.
      * @return {boolean} Whether this Long is greater than or equal to the other.
      * @expose
      */
@@ -557,7 +566,7 @@ goog.provide('dcodeIO.Long');
 
     /**
      * Compares this Long with the given one.
-     * @param {Long} other Long to compare against.
+     * @param {dcodeIO.Long} other Long to compare against.
      * @return {number} 0 if they are the same, 1 if the this is greater, and -1
      *     if the given one is greater.
      * @expose
@@ -580,7 +589,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @return {!Long} The negation of this value.
+     * @return {!dcodeIO.Long} The negation of this value.
      * @expose
      */
     Long.prototype.negate = function() {
@@ -592,8 +601,8 @@ goog.provide('dcodeIO.Long');
 
     /**
      * Returns the sum of this and the given Long.
-     * @param {Long} other Long to add to this one.
-     * @return {!Long} The sum of this and the given Long.
+     * @param {dcodeIO.Long} other Long to add to this one.
+     * @return {!dcodeIO.Long} The sum of this and the given Long.
      * @expose
      */
     Long.prototype.add = function(other) {
@@ -626,8 +635,8 @@ goog.provide('dcodeIO.Long');
 
     /**
      * Returns the difference of this and the given Long.
-     * @param {Long} other Long to subtract from this.
-     * @return {!Long} The difference of this and the given Long.
+     * @param {dcodeIO.Long} other Long to subtract from this.
+     * @return {!dcodeIO.Long} The difference of this and the given Long.
      * @expose
      */
     Long.prototype.subtract = function(other) {
@@ -636,8 +645,8 @@ goog.provide('dcodeIO.Long');
 
     /**
      * Returns the product of this and the given long.
-     * @param {Long} other Long to multiply with this.
-     * @return {!Long} The product of this and the other.
+     * @param {dcodeIO.Long} other Long to multiply with this.
+     * @return {!dcodeIO.Long} The product of this and the other.
      * @expose
      */
     Long.prototype.multiply = function(other) {
@@ -707,8 +716,8 @@ goog.provide('dcodeIO.Long');
 
     /**
      * Returns this Long divided by the given one.
-     * @param {Long} other Long by which to divide.
-     * @return {!Long} This Long divided by the given one.
+     * @param {dcodeIO.Long} other Long by which to divide.
+     * @return {!dcodeIO.Long} This Long divided by the given one.
      * @expose
      */
     Long.prototype.div = function(other) {
@@ -788,8 +797,8 @@ goog.provide('dcodeIO.Long');
 
     /**
      * Returns this Long modulo the given one.
-     * @param {Long} other Long by which to mod.
-     * @return {!Long} This Long modulo the given one.
+     * @param {dcodeIO.Long} other Long by which to mod.
+     * @return {!dcodeIO.Long} This Long modulo the given one.
      * @expose
      */
     Long.prototype.modulo = function(other) {
@@ -797,7 +806,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @return {!Long} The bitwise-NOT of this value.
+     * @return {!dcodeIO.Long} The bitwise-NOT of this value.
      * @expose
      */
     Long.prototype.not = function() {
@@ -806,8 +815,8 @@ goog.provide('dcodeIO.Long');
 
     /**
      * Returns the bitwise-AND of this Long and the given one.
-     * @param {Long} other The Long with which to AND.
-     * @return {!Long} The bitwise-AND of this and the other.
+     * @param {dcodeIO.Long} other The Long with which to AND.
+     * @return {!dcodeIO.Long} The bitwise-AND of this and the other.
      * @expose
      */
     Long.prototype.and = function(other) {
@@ -816,8 +825,8 @@ goog.provide('dcodeIO.Long');
 
     /**
      * Returns the bitwise-OR of this Long and the given one.
-     * @param {Long} other The Long with which to OR.
-     * @return {!Long} The bitwise-OR of this and the other.
+     * @param {dcodeIO.Long} other The Long with which to OR.
+     * @return {!dcodeIO.Long} The bitwise-OR of this and the other.
      * @expose
      */
     Long.prototype.or = function(other) {
@@ -826,8 +835,8 @@ goog.provide('dcodeIO.Long');
 
     /**
      * Returns the bitwise-XOR of this Long and the given one.
-     * @param {Long} other The Long with which to XOR.
-     * @return {!Long} The bitwise-XOR of this and the other.
+     * @param {dcodeIO.Long} other The Long with which to XOR.
+     * @return {!dcodeIO.Long} The bitwise-XOR of this and the other.
      * @expose
      */
     Long.prototype.xor = function(other) {
@@ -837,7 +846,7 @@ goog.provide('dcodeIO.Long');
     /**
      * Returns this Long with bits shifted to the left by the given amount.
      * @param {number} numBits The number of bits by which to shift.
-     * @return {!Long} This shifted to the left by the given amount.
+     * @return {!dcodeIO.Long} This shifted to the left by the given amount.
      * @expose
      */
     Long.prototype.shiftLeft = function(numBits) {
@@ -858,7 +867,7 @@ goog.provide('dcodeIO.Long');
     /**
      * Returns this Long with bits shifted to the right by the given amount.
      * @param {number} numBits The number of bits by which to shift.
-     * @return {!Long} This shifted to the right by the given amount.
+     * @return {!dcodeIO.Long} This shifted to the right by the given amount.
      * @expose
      */
     Long.prototype.shiftRight = function(numBits) {
@@ -880,7 +889,7 @@ goog.provide('dcodeIO.Long');
      * Returns this Long with bits shifted to the right by the given amount, with
      * the new top bits matching the current sign bit.
      * @param {number} numBits The number of bits by which to shift.
-     * @return {!Long} This shifted to the right by the given amount, with
+     * @return {!dcodeIO.Long} This shifted to the right by the given amount, with
      *     zeros placed into the new leading bits.
      * @expose
      */
@@ -902,7 +911,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @return {!Long} Signed long
+     * @return {!dcodeIO.Long} Signed long
      * @expose
      */
     Long.prototype.toSigned = function() {
@@ -912,7 +921,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @return {!Long} Unsigned long
+     * @return {!dcodeIO.Long} Unsigned long
      * @expose
      */
     Long.prototype.toUnsigned = function() {
@@ -922,7 +931,7 @@ goog.provide('dcodeIO.Long');
     };
 
     /**
-     * @return {Long} Cloned instance with the same low/high bits and unsigned flag.
+     * @return {dcodeIO.Long} Cloned instance with the same low/high bits and unsigned flag.
      * @expose
      */
     Long.prototype.clone = function() {
